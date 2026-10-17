@@ -1,9 +1,12 @@
 {
   "name": "pi-mindfold",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Compact single-focus activity, reasoning fold, and real-time intent for Pi Coding Agent",
   "type": "module",
   "author": "yoggs",
+  "contributors": [
+    "Nyarlathoteppppp <Nyarlathoteppppp@users.noreply.github.com>"
+  ],
   "license": "MIT",
   "keywords": [
     "pi-package",
@@ -23,12 +26,14 @@
   "pi": {
     "extensions": [
       "./index.js"
-    ]
+    ],
+    "image": "https://raw.githubusercontent.com/yoggsaron010-lang/pi-mindfold/main/assets/demo-collapsed.png"
   },
   "files": [
     "index.js",
     "src",
     "vendor",
+    "assets",
     "README.md",
     "README.zh-CN.md",
     "COMPATIBILITY.md",

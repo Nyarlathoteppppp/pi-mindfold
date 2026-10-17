@@ -8,24 +8,21 @@
 
 ## 显示效果
 
-刚进入思考、尚未收到公开活动说明时：
+### 折叠态（默认模式，单一活动焦点）
 
-```text
-Thinking
-```
+> 折叠模式下，历史思考与已完成的工具调用自动收起，仅在输入框上方呈现最新正在执行的工具卡片与实时意图。
 
-模型提供公开活动说明后：
+<p align="center">
+  <img src="./assets/demo-collapsed.png" alt="折叠态：单一活动焦点" width="850" />
+</p>
 
-```text
-Thinking — 检查重载后历史工具的恢复逻辑
-```
+### 展开态（按需展开，完整时序复盘）
 
-工具开始执行后，切换为原生工具预览及中文意图：
+> 点击输入框上方的 `[Collapse]` 按钮或按下 `Ctrl+Alt+T`，瞬间拉开本轮完整的思维链过程、全部工具调用输出与嵌套执行记录。
 
-```text
-read src/index.ts
-  ↳ 检查入口文件如何注册工具
-```
+<p align="center">
+  <img src="./assets/demo-expanded.png" alt="展开态：完整历史时序" width="850" />
+</p>
 
 按钮固定在输入栏上方。折叠时显示 `[Collapse]`，展开时显示 `[Expanded]`：
 
@@ -33,8 +30,6 @@ read src/index.ts
 [Collapse]  ‹ 2/2 ›  Ctrl+Alt+T
 > 输入消息
 ```
-
-以上为文本示意，工具预览的实际样式由 Pi 和对应工具的 renderer 决定。
 
 ## 功能
 
@@ -197,10 +192,11 @@ pi remove C:/path/to/pi-mindfold
 
 随后执行 `/reload` 或重启 Pi。卸载不自动删除已有会话的历史显示数据。
 
-## 致谢与许可证
+## 贡献者与致谢
 
-本项目复用了 [Nyarlathoteppppp/pi-tool-explain](https://github.com/Nyarlathoteppppp/pi-tool-explain) 的意图模块与视口定位模块，原始源码和许可证保留在 `vendor/pi-tool-explain/`。
+- 特别感谢 [@Nyarlathoteppppp](https://github.com/Nyarlathoteppppp) 为原版 [pi-tool-explain](https://github.com/Nyarlathoteppppp/pi-tool-explain) 所作的意图与展示机制贡献。
+- 上游贡献者：[MasuRii](https://github.com/MasuRii)（`pi-tool-display`）与 [Mert Deveci](https://github.com/mertdeveci5)（`pi-tool-display-summary`）。
 
-上游项目同时包含 MasuRii 的 `pi-tool-display` 与 Mert Deveci 的 `pi-tool-display-summary` 贡献。固定版本及完整署名见 [THIRD_PARTY.md](./THIRD_PARTY.md)。
+本项目复用了 `vendor/pi-tool-explain/` 下的代码与原始许可，完整说明参见 [THIRD_PARTY.md](./THIRD_PARTY.md)。
 
 本项目采用 [MIT License](./LICENSE)。

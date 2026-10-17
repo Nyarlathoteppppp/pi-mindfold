@@ -5,7 +5,7 @@
 > A sleek, intent-aware interaction plugin for [Pi Coding Agent](https://github.com/earendil-works/pi) (Pi 1.0.0 – 1.3.0+).  
 > Collapses lengthy reasoning streams and stacked tool outputs into a **single active focus**, displays model-written intent in real-time, and provides one-click lossless expansion for full execution history.
 
-[![npm version](https://img.shields.io/badge/version-0.2.1-blue.svg)](package.json)
+[![npm version](https://img.shields.io/badge/version-0.2.2-blue.svg)](package.json)
 [![Pi Compatibility](https://img.shields.io/badge/pi-1.0.0%20--%201.3.0-success.svg)](COMPATIBILITY.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -61,42 +61,19 @@ When using coding agents with deep reasoning models:
 
 ### Collapsed Mode (Default)
 
-```text
-read src/index.ts
-  ↳ Inspect module exports and route declarations
+> *In collapsed mode, prior reasoning and previous tool runs are folded into a single active focus. Only the latest invoked tool card and its real-time intent are displayed above the prompt.*
 
-Here is the implementation overview for the route configuration...
-
-────────────────────────────────────────────────────────────
-[Collapse]  ‹ 2/2 ›                              Ctrl+Alt+T
-> 
-```
+<p align="center">
+  <img src="./assets/demo-collapsed.png" alt="Collapsed Mode - Single Active Focus" width="850" />
+</p>
 
 ### Expanded Mode (After toggle)
 
-```text
-Thinking:
-First inspecting package.json to identify entry points, then reading src/index.ts...
+> *Clicking `[Collapse]` (or pressing `Ctrl+Alt+T`) restores the entire chronological execution history: all raw thinking steps, sequential tool invocations, and full terminal outputs.*
 
-read package.json
-  ↳ Check entry point and project dependencies
-  { "name": "project", "main": "src/index.ts", ... }
-
-codemode
-  ↳ Concurrently inspect entry module and scan routes directory
-  ├─ read src/index.ts
-  │    ↳ Inspect module exports and route declarations
-  │    export function initRoutes() { ... }
-  └─ nushell ls src/routes
-       ↳ List route modules in directory
-       name | type | size ...
-
-Here is the implementation overview for the route configuration...
-
-────────────────────────────────────────────────────────────
-[Expanded]  ‹ 2/2 ›                              Ctrl+Alt+T
-> 
-```
+<p align="center">
+  <img src="./assets/demo-expanded.png" alt="Expanded Mode - Full Historical Replay" width="850" />
+</p>
 
 ---
 
@@ -188,10 +165,9 @@ Detailed test evidence and lifecycle benchmarks are documented in [COMPATIBILITY
 
 ---
 
-## Third-Party Attributions & License
+## Contributors & Third-Party Attributions
 
-This project adapts and vendors core display-summary and viewport-anchoring primitives from:
-- [Nyarlathoteppppp/pi-tool-explain](https://github.com/Nyarlathoteppppp/pi-tool-explain) (MIT License)
+- Special thanks to [@Nyarlathoteppppp](https://github.com/Nyarlathoteppppp) for the original [pi-tool-explain](https://github.com/Nyarlathoteppppp/pi-tool-explain) intent and display mechanics.
 - Upstream contributors: [MasuRii](https://github.com/MasuRii) (`pi-tool-display`) and [Mert Deveci](https://github.com/mertdeveci5) (`pi-tool-display-summary`).
 
 All vendored licenses and attribution notices are strictly preserved under `vendor/pi-tool-explain/` and [THIRD_PARTY.md](./THIRD_PARTY.md).
