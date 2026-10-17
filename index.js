@@ -1,0 +1,89 @@
+import { ActivityStore } from "./src/activity-store.js";
+import { CompactController } from "./src/controller.js";
+import { IntentDecorator } from "./src/intent.js";
+import { installRegistryBridge } from "./src/registry-bridge.js";
+import { nestedResultReceipt, saveDisplayPayload, toolStartReceipt } from "./src/activity-journal.js";
+import { addPublicActivityGuideline } from "./src/thinking-intent.js";
+
+export default function compactThinking(pi) {
+  const store = new ActivityStore();
+  const controller = new CompactController(store);
+  const decorator = new IntentDecorator();
+  const disposeRegistry = installRegistryBridge(decorator, (registry) => { controller.definitions = registry ?? new Map(); });
+
+  const restore = (_event, ctx) => {
+    controller.clear();
+    store.restore(ctx.sessionManager.buildContextEntries());
+    controller.attach(ctx);
+  };
+  pi.on("session_start", restore);
+  pi.on("session_tree", restore);
+  pi.on("session_compact", (_event, ctx) => {
+    const active = store.current && !store.current.settled;
+    restore(_event, ctx);
+    if (active && store.current) store.current.settled = false;
+  });
+  pi.on("before_agent_start", (event) => {
+    if (!store.current || store.current.settled) store.begin();
+    addPublicActivityGuideline(event);
+  });
+  pi.on("message_start", (event) => {
+    if (event.message.role === "user" && store.current?.finalResponse) store.begin();
+    if (event.message.role === "assistant") store.assistant(event.message, true, true);
+    controller.changed();
+  });
+  pi.on("message_update", (event) => {
+    if (event.message.role !== "assistant") return;
+    const type = event.assistantMessageEvent.type;
+    if (type === "thinking_start") store.startThinking(event.message);
+    else store.assistant(event.message, type === "thinking_delta");
+    if (type === "text_start" || type === "text_delta" || type === "text_end") {
+      store.text(event.message, { complete: type === "text_end" });
+    }
+    controller.changed();
+  });
+  pi.on("message_end", (event) => {
+    if (event.message.role === "assistant") {
+      const group = store.assistant(event.message);
+      const finished = ["stop", "aborted", "error", "length"].includes(event.message.stopReason);
+      store.text(event.message, { complete: true, finished });
+      if (finished && group) group.finalResponse = true;
+    }
+    controller.changed();
+  });
+  pi.on("tool_execution_start", (event, ctx) => {
+    const call = store.startTool(event);
+    pi.appendEntry("compact-thinking.tool-start", saveDisplayPayload(toolStartReceipt(event), ctx.sessionManager.getSessionDir()));
+    controller.startNested(call);
+    controller.changed();
+  });
+  pi.on("tool_execution_update", (event) => {
+    controller.updateNested(store.result(event, true));
+    controller.changed();
+  });
+  pi.on("tool_execution_end", (event, ctx) => {
+    if (event.parentToolCallId) pi.appendEntry("compact-thinking.nested", saveDisplayPayload(nestedResultReceipt(event), ctx.sessionManager.getSessionDir()));
+    controller.updateNested(store.result(event));
+    controller.changed();
+  });
+  // agent_end is a low-level boundary; recovery/queued continuations can follow.
+  pi.on("agent_settled", () => { store.settle(); controller.changed(); });
+  pi.on("session_shutdown", () => { controller.dispose(); disposeRegistry(); });
+
+  pi.registerShortcut("ctrl+alt+t", {
+    description: "展开或折叠当前对话的思考与工具记录",
+    handler: () => controller.toggle(),
+  });
+  pi.registerCommand("compact-thinking", {
+    description: "思考与工具显示：toggle / expand / collapse / prev / next / status",
+    handler: async (args, ctx) => {
+      const action = args.trim() || "toggle";
+      if (action === "status") {
+        ctx.ui.notify(`Compact Thinking：${store.groups.length} 次对话，${decorator.originals.size} 个工具已启用中文意图${decorator.skipped.size ? `；保留原参数约定：${[...decorator.skipped].join(", ")}` : ""}`, "info");
+      } else if (["toggle", "expand", "collapse"].includes(action)) {
+        controller.toggle(action === "toggle" ? undefined : action === "expand");
+      } else if (action === "prev" || action === "next") controller.select(action === "prev" ? -1 : 1);
+      else ctx.ui.notify("用法：/compact-thinking [toggle|expand|collapse|prev|next|status]", "warning");
+    },
+  });
+}

@@ -1,0 +1,19 @@
+{
+  "name": "pi-compact-thinking",
+  "version": "0.2.0",
+  "description": "Compact current activity, per-request history, and Chinese tool intent for Pi 1.x",
+  "type": "module",
+  "license": "MIT",
+  "keywords": ["pi-package"],
+  "pi": { "extensions": ["./index.js"] },
+  "files": ["index.js", "src", "vendor", "README.md", "COMPATIBILITY.md", "LICENSE", "THIRD_PARTY.md"],
+  "scripts": {
+    "test": "node --import ./tests/host-imports.mjs --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "engines": { "node": ">=22.19.0" }
+}
