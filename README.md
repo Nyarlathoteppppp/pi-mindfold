@@ -5,7 +5,7 @@
 > A sleek, intent-aware interaction plugin for [Pi Coding Agent](https://github.com/earendil-works/pi) (Pi 1.0.0 – 1.3.0+).  
 > Collapses lengthy reasoning streams and stacked tool outputs into a **single active focus**, displays model-written intent in real-time, and provides one-click lossless expansion for full execution history.
 
-[![npm version](https://img.shields.io/badge/version-0.2.0-blue.svg)](package.json)
+[![npm version](https://img.shields.io/badge/version-0.2.1-blue.svg)](package.json)
 [![Pi Compatibility](https://img.shields.io/badge/pi-1.0.0%20--%201.3.0-success.svg)](COMPATIBILITY.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 

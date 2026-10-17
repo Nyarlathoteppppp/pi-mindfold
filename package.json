@@ -1,6 +1,6 @@
 {
   "name": "pi-mindfold",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Compact single-focus activity, reasoning fold, and real-time intent for Pi Coding Agent",
   "type": "module",
   "author": "yoggs",
