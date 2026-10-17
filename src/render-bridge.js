@@ -4,7 +4,7 @@ import { messageKey } from "./activity-store.js";
 import { intentFor } from "./intent.js";
 import { compactAssistantContent } from "./thinking-intent.js";
 
-const OWNER = Symbol.for("pi-compact-thinking.render.v1");
+const OWNER = Symbol.for("pi-mindfold.render.v1");
 
 class IntentCall {
   constructor(native, getSummary, theme) { this.native = native; this.getSummary = getSummary; this.theme = theme; }

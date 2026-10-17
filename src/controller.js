@@ -24,7 +24,7 @@ export class CompactController {
       patchAggregateViewport();
       this.disposeRender = installRenderBridge(this);
     }
-    ctx.ui.setWidget("compact-thinking", (tui, theme) => {
+    ctx.ui.setWidget("mindfold", (tui, theme) => {
       this.tui = tui;
       this.theme = theme;
       const control = {
@@ -136,7 +136,7 @@ export class CompactController {
     this.disposeRender = undefined;
     this.clear();
     restoreAggregateViewport();
-    if (this.ctx?.mode === "tui") this.ctx.ui.setWidget("compact-thinking", undefined);
+    if (this.ctx?.mode === "tui") this.ctx.ui.setWidget("mindfold", undefined);
     this.tui = undefined;
   }
 }

@@ -8,7 +8,7 @@ import {
 } from "@earendil-works/pi-coding-agent";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai";
 import { Type } from "typebox";
-import compactThinking from "../index.js";
+import mindfold from "../index.js";
 
 const clean = (lines) => lines.join("\n").replace(/\x1b\][^\x07]*(?:\x07|\x1b\\)/g, "").replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, "");
 const model = { id: "thinking-intent-local-test", name: "Local test", provider: "openai", api: "openai-completions", baseUrl: "http://127.0.0.1:1", reasoning: true, input: ["text"], contextWindow: 32768, maxTokens: 4096,
@@ -22,7 +22,7 @@ test("real streamed SDK events update Thinking intent without extra inference an
   const settingsManager = SettingsManager.inMemory({ defaultTools: ["echo_status"], compaction: { enabled: false } });
   const resourceLoader = new DefaultResourceLoader({ cwd: directory, agentDir: directory, settingsManager,
     noExtensions: true, noSkills: true, noPromptTemplates: true, noThemes: true,
-    extensionFactories: [compactThinking, (pi) => pi.registerTool({ name: "echo_status", label: "echo_status", description: "Echo fixture", parameters: Type.Object({ value: Type.String() }),
+    extensionFactories: [mindfold, (pi) => pi.registerTool({ name: "echo_status", label: "echo_status", description: "Echo fixture", parameters: Type.Object({ value: Type.String() }),
       async execute(_id, args) { return { content: [{ type: "text", text: args.value }], details: undefined }; } })],
   });
   await resourceLoader.reload();

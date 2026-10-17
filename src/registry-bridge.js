@@ -1,6 +1,6 @@
 import { AgentSession } from "@earendil-works/pi-coding-agent";
 
-const OWNER = Symbol.for("pi-compact-thinking.registry.v1");
+const OWNER = Symbol.for("pi-mindfold.registry.v1");
 
 /** Pi 1.0 has no public cross-extension tool decorator. Patch only the registry
  * rebuild boundary so original owners, exposure, settings and renderers survive. */

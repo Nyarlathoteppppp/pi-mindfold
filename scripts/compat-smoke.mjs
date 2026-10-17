@@ -26,8 +26,10 @@ const { session } = await createAgentSession({
   sessionManager: SessionManager.inMemory(process.cwd()),
 });
 try {
-  const command = session.extensionRunner.getCommand("compact-thinking");
-  assert.ok(command, "installed compact-thinking command missing");
+  const command = session.extensionRunner.getCommand("mindfold");
+  assert.ok(command, "installed mindfold command missing");
+  const alias = session.extensionRunner.getCommand("compact-thinking");
+  assert.ok(alias, "installed compact-thinking alias command missing");
   assert.equal(session.extensionRunner.getCommand("compact"), undefined, "reserved builtin command collision");
   const tools = session.getAllTools();
   const ordinary = tools.filter((tool) => ["read", "edit", "write", "grep", "find", "ls", "nu", "nushell"].includes(tool.name));

@@ -2,7 +2,7 @@ import { test, before } from "node:test";
 import assert from "node:assert/strict";
 import { AssistantMessageComponent, ToolExecutionComponent, createReadToolDefinition, initTheme } from "@earendil-works/pi-coding-agent";
 import { visibleWidth } from "@earendil-works/pi-tui";
-import compactThinking from "../index.js";
+import mindfold from "../index.js";
 import { ActivityStore } from "../src/activity-store.js";
 import { CompactController } from "../src/controller.js";
 
@@ -158,7 +158,7 @@ test("replayed progress-only messages do not leave a stale Thinking label after 
 
 test("extension adds a deduplicated public-status guideline without replacing structured prompt sections", async () => {
   const handlers = new Map();
-  compactThinking({ on(name, handler) { handlers.set(name, handler); }, registerCommand() {}, registerShortcut() {} });
+  mindfold({ on(name, handler) { handlers.set(name, handler); }, registerCommand() {}, registerShortcut() {} });
   try {
     const event = { systemPromptOptions: { promptGuidelines: ["Original guideline"], sections: { original: "Retained section" } } };
     await handlers.get("before_agent_start")(event);

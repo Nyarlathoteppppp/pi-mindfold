@@ -1,4 +1,4 @@
-# Pi Compact Thinking
+# Pi Mindfold
 
 面向 Pi 1.x 的紧凑思考与中文工具意图插件，已通过 Pi **1.0.0** 与 **1.3.0** 的兼容性回归。
 
@@ -58,7 +58,7 @@ pi install .
 在 Pi 中执行 `/reload`，或重启 Pi。也可以指定本地绝对路径：
 
 ```text
-pi install C:/path/to/pi-compact-thinking
+pi install C:/path/to/pi-mindfold
 ```
 
 Pi 提供运行时依赖，本插件不需要单独安装 `pi-tool-explain`。
@@ -72,15 +72,15 @@ Pi 提供运行时依赖，本插件不需要单独安装 `pi-tool-explain`。
 | 点击 `[Collapse]` / `[Expanded]` | 切换选中对话的显示状态 |
 | `Ctrl+Alt+T` | 切换选中对话的显示状态 |
 | 点击 `‹` / `›` | 选择上一次或下一次对话 |
-| `/compact-thinking` 或 `/compact-thinking toggle` | 切换显示状态 |
-| `/compact-thinking expand` | 展开选中对话 |
-| `/compact-thinking collapse` | 折叠选中对话 |
-| `/compact-thinking prev` / `/compact-thinking next` | 选择历史对话 |
-| `/compact-thinking status` | 查看对话数量、意图接入数量和保留原参数约定的工具 |
+| `/mindfold` 或 `/mindfold toggle` | 切换显示状态 |
+| `/mindfold expand` | 展开选中对话 |
+| `/mindfold collapse` | 折叠选中对话 |
+| `/mindfold prev` / `/mindfold next` | 选择历史对话 |
+| `/mindfold status` | 查看对话数量、意图接入数量和保留原参数约定的工具 |
 
 鼠标操作需要 Pi fullscreen 模式；普通终端模式可以使用快捷键和命令。
 
-Pi 内置的 `/compact` 用于压缩模型上下文。本插件使用独立的 `/compact-thinking` 命令。
+Pi 内置的 `/compact` 用于压缩模型上下文。本插件主命令为 `/mindfold`（保留 `/compact-thinking` 作为兼容别名）。
 
 ## 思考阶段的公开意图
 
@@ -147,10 +147,10 @@ for (const result of results) text(result);
 
 插件通过不进入模型上下文的自定义 session 条目保存：
 
-- `compact-thinking.tool-start`：工具真实开始顺序。
-- `compact-thinking.nested`：嵌套工具的显示结果，仅含 `content` 与 `details`，避免重复保存 `structuredContent` 和用量信息。
+- `mindfold.tool-start`：工具真实开始顺序。
+- `mindfold.nested`：嵌套工具的显示结果，仅含 `content` 与 `details`，避免重复保存 `structuredContent` 和用量信息。
 
-单条嵌套数据超过 64 KB 时，完整数据保存到会话目录下的 `.compact-thinking/` 旁文件，session 保存路径与 SHA-256 校验值。不会按工具数量截断历史。备份或搬迁会话时需同时保留旁文件目录；文件缺失或损坏时显示提示，目录不可写时退回完整内联保存。
+单条嵌套数据超过 64 KB 时，完整数据保存到会话目录下的 `.mindfold/` 旁文件，session 保存路径与 SHA-256 校验值。不会按工具数量截断历史。备份或搬迁会话时需同时保留旁文件目录；文件缺失或损坏时显示提示，目录不可写时退回完整内联保存。
 
 旧会话仍可读取，但此前没有保存的嵌套输出和精确并行启动顺序无法补回。上下文压缩后，导航只统计仍然可见的对话。
 
@@ -192,7 +192,7 @@ node --import ./tests/host-imports.mjs ./scripts/compat-smoke.mjs
 ## 卸载
 
 ```text
-pi remove C:/path/to/pi-compact-thinking
+pi remove C:/path/to/pi-mindfold
 ```
 
 随后执行 `/reload` 或重启 Pi。卸载不自动删除已有会话的历史显示数据。

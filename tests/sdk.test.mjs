@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { createAgentSession, createCodemodeExtension, DefaultResourceLoader, SessionManager, SettingsManager } from "@earendil-works/pi-coding-agent";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai";
 import { Type } from "typebox";
-import compactThinking from "../index.js";
+import mindfold from "../index.js";
 import { ActivityStore } from "../src/activity-store.js";
 import { hostModule } from "./host-modules.mjs";
 import { assertCodemodeMcpContract } from "./codemode-contract.mjs";
@@ -49,7 +49,7 @@ test("real host registry decorates built-ins, extensions, SDK tools, codemode an
   const resourceLoader = new DefaultResourceLoader({
     cwd: directory, agentDir: directory, settingsManager, noExtensions: true, noSkills: true,
     noPromptTemplates: true, noThemes: true,
-    extensionFactories: [compactThinking, createCodemodeExtension(), (pi) => { extensionApi = pi; pi.registerTool(echo("echo_custom")); }],
+    extensionFactories: [mindfold, createCodemodeExtension(), (pi) => { extensionApi = pi; pi.registerTool(echo("echo_custom")); }],
   });
   await resourceLoader.reload();
   const errors = resourceLoader.getExtensions().errors;
@@ -97,10 +97,10 @@ test("real host registry decorates built-ins, extensions, SDK tools, codemode an
     assert.ok(nestedStarts[1].args.displaySummary);
     assert.ok(events.some((event) => event.type === "agent_settled"));
     const branch = session.sessionManager.getBranch();
-    const saved = branch.filter((entry) => entry.type === "custom" && entry.customType === "compact-thinking.nested");
+    const saved = branch.filter((entry) => entry.type === "custom" && (entry.customType === "mindfold.nested" || entry.customType === "compact-thinking.nested"));
     assert.equal(saved.length, 2);
     assert.ok(saved.every((entry) => !("structuredContent" in entry.data.result)));
-    const starts = branch.filter((entry) => entry.type === "custom" && entry.customType === "compact-thinking.tool-start");
+    const starts = branch.filter((entry) => entry.type === "custom" && (entry.customType === "mindfold.tool-start" || entry.customType === "compact-thinking.tool-start"));
     assert.equal(starts.length, 6);
     assert.ok(starts.filter((entry) => !entry.data.parentToolCallId).every((entry) => !("args" in entry.data)));
     const restored = new ActivityStore();

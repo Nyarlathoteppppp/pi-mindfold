@@ -179,11 +179,11 @@ export class ActivityStore {
   restore(entries) {
     this.reset();
     for (const entry of entries) {
-      if (entry.type === "custom" && entry.customType === "compact-thinking.tool-start") {
+      if (entry.type === "custom" && (entry.customType === "mindfold.tool-start" || entry.customType === "compact-thinking.tool-start")) {
         this.startTool(loadDisplayPayload(entry.data));
         continue;
       }
-      if (entry.type === "custom" && entry.customType === "compact-thinking.nested") {
+      if (entry.type === "custom" && (entry.customType === "mindfold.nested" || entry.customType === "compact-thinking.nested")) {
         const data = loadDisplayPayload(entry.data);
         if (data?.phase === "start") {
           // Legacy sessions did not save top-level starts. Infer only the parent;

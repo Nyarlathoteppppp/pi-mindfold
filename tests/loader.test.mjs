@@ -27,6 +27,7 @@ test("Pi's actual extension loader loads the packaged JavaScript and vendored Ty
     const commands = session.extensionRunner.getRegisteredCommands();
     const builtins = new Set(BUILTIN_SLASH_COMMANDS.map((command) => command.name));
     assert.ok(commands.every((command) => !builtins.has(command.name)), "extension commands must not trigger builtin context compaction");
+    assert.ok(commands.some((command) => command.name === "mindfold"));
     assert.ok(commands.some((command) => command.name === "compact-thinking"));
     assert.ok(session.getAllTools().find((tool) => tool.name === "read").parameters.properties.displaySummary);
   } finally {

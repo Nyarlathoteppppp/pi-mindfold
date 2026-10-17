@@ -3,6 +3,8 @@ import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export const INLINE_PAYLOAD_BYTES = 64 * 1024;
+export const SIDECAR_DIR = ".mindfold";
+export const LEGACY_SIDECAR_DIR = ".compact-thinking";
 
 function digest(text) { return createHash("sha256").update(text).digest("hex"); }
 
@@ -12,7 +14,7 @@ export function saveDisplayPayload(data, directory) {
   const json = JSON.stringify(data);
   if (!directory || Buffer.byteLength(json) <= INLINE_PAYLOAD_BYTES) return data;
   const hash = digest(json);
-  const storage = join(directory, ".compact-thinking");
+  const storage = join(directory, SIDECAR_DIR);
   try {
     mkdirSync(storage, { recursive: true });
     const path = join(storage, `${hash}.json`);
@@ -37,7 +39,7 @@ export function loadDisplayPayload(data) {
   } catch {
     return { ...data, missingDisplayPayload: true,
       args: { displaySummary: "原始显示数据不可用" },
-      result: { content: [{ type: "text", text: "Saved display data is missing or damaged. Restore the session's .compact-thinking sidecar directory." }] }, isError: true };
+      result: { content: [{ type: "text", text: "Saved display data is missing or damaged. Restore the session's .mindfold sidecar directory." }] }, isError: true };
   }
 }
 

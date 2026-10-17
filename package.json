@@ -1,12 +1,40 @@
 {
-  "name": "pi-compact-thinking",
+  "name": "pi-mindfold",
   "version": "0.2.0",
-  "description": "Compact current activity, per-request history, and Chinese tool intent for Pi 1.x",
+  "description": "Compact single-focus activity, reasoning fold, and real-time intent for Pi Coding Agent",
   "type": "module",
+  "author": "yoggs",
   "license": "MIT",
-  "keywords": ["pi-package"],
-  "pi": { "extensions": ["./index.js"] },
-  "files": ["index.js", "src", "vendor", "README.md", "README.zh-CN.md", "COMPATIBILITY.md", "LICENSE", "THIRD_PARTY.md"],
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "compact-thinking",
+    "tool-intent",
+    "tui"
+  ],
+  "homepage": "https://github.com/yoggsaron010-lang/pi-mindfold#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoggsaron010-lang/pi-mindfold.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yoggsaron010-lang/pi-mindfold/issues"
+  },
+  "pi": {
+    "extensions": [
+      "./index.js"
+    ]
+  },
+  "files": [
+    "index.js",
+    "src",
+    "vendor",
+    "README.md",
+    "README.zh-CN.md",
+    "COMPATIBILITY.md",
+    "LICENSE",
+    "THIRD_PARTY.md"
+  ],
   "scripts": {
     "test": "node --import ./tests/host-imports.mjs --test tests/*.test.mjs",
     "check": "node scripts/check.mjs"
@@ -15,5 +43,7 @@
     "@earendil-works/pi-coding-agent": "*",
     "@earendil-works/pi-tui": "*"
   },
-  "engines": { "node": ">=22.19.0" }
+  "engines": {
+    "node": ">=22.19.0"
+  }
 }

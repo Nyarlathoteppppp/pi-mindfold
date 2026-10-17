@@ -5,7 +5,7 @@ import { installRegistryBridge } from "./src/registry-bridge.js";
 import { nestedResultReceipt, saveDisplayPayload, toolStartReceipt } from "./src/activity-journal.js";
 import { addPublicActivityGuideline } from "./src/thinking-intent.js";
 
-export default function compactThinking(pi) {
+export default function mindfold(pi) {
   const store = new ActivityStore();
   const controller = new CompactController(store);
   const decorator = new IntentDecorator();
@@ -53,7 +53,7 @@ export default function compactThinking(pi) {
   });
   pi.on("tool_execution_start", (event, ctx) => {
     const call = store.startTool(event);
-    pi.appendEntry("compact-thinking.tool-start", saveDisplayPayload(toolStartReceipt(event), ctx.sessionManager.getSessionDir()));
+    pi.appendEntry("mindfold.tool-start", saveDisplayPayload(toolStartReceipt(event), ctx.sessionManager.getSessionDir()));
     controller.startNested(call);
     controller.changed();
   });
@@ -62,7 +62,7 @@ export default function compactThinking(pi) {
     controller.changed();
   });
   pi.on("tool_execution_end", (event, ctx) => {
-    if (event.parentToolCallId) pi.appendEntry("compact-thinking.nested", saveDisplayPayload(nestedResultReceipt(event), ctx.sessionManager.getSessionDir()));
+    if (event.parentToolCallId) pi.appendEntry("mindfold.nested", saveDisplayPayload(nestedResultReceipt(event), ctx.sessionManager.getSessionDir()));
     controller.updateNested(store.result(event));
     controller.changed();
   });
@@ -74,16 +74,22 @@ export default function compactThinking(pi) {
     description: "展开或折叠当前对话的思考与工具记录",
     handler: () => controller.toggle(),
   });
-  pi.registerCommand("compact-thinking", {
+  const commandHandler = async (args, ctx) => {
+    const action = args.trim() || "toggle";
+    if (action === "status") {
+      ctx.ui.notify(`Mindfold：${store.groups.length} 次对话，${decorator.originals.size} 个工具已启用中文意图${decorator.skipped.size ? `；保留原参数约定：${[...decorator.skipped].join(", ")}` : ""}`, "info");
+    } else if (["toggle", "expand", "collapse"].includes(action)) {
+      controller.toggle(action === "toggle" ? undefined : action === "expand");
+    } else if (action === "prev" || action === "next") controller.select(action === "prev" ? -1 : 1);
+    else ctx.ui.notify("用法：/mindfold [toggle|expand|collapse|prev|next|status]", "warning");
+  };
+
+  pi.registerCommand("mindfold", {
     description: "思考与工具显示：toggle / expand / collapse / prev / next / status",
-    handler: async (args, ctx) => {
-      const action = args.trim() || "toggle";
-      if (action === "status") {
-        ctx.ui.notify(`Compact Thinking：${store.groups.length} 次对话，${decorator.originals.size} 个工具已启用中文意图${decorator.skipped.size ? `；保留原参数约定：${[...decorator.skipped].join(", ")}` : ""}`, "info");
-      } else if (["toggle", "expand", "collapse"].includes(action)) {
-        controller.toggle(action === "toggle" ? undefined : action === "expand");
-      } else if (action === "prev" || action === "next") controller.select(action === "prev" ? -1 : 1);
-      else ctx.ui.notify("用法：/compact-thinking [toggle|expand|collapse|prev|next|status]", "warning");
-    },
+    handler: commandHandler,
+  });
+  pi.registerCommand("compact-thinking", {
+    description: "思考与工具显示（/mindfold 别名）：toggle / expand / collapse / prev / next / status",
+    handler: commandHandler,
   });
 }
