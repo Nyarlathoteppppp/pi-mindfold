@@ -44,7 +44,13 @@
 
 ## 安装
 
-从 GitHub 下载或克隆本仓库后，在仓库目录执行：
+从 npm 安装：
+
+```text
+pi install npm:pi-mindfold
+```
+
+或从 GitHub 下载或克隆本仓库后，在仓库目录执行：
 
 ```text
 pi install .
@@ -53,7 +59,7 @@ pi install .
 在 Pi 中执行 `/reload`，或重启 Pi。也可以指定本地绝对路径：
 
 ```text
-pi install C:/path/to/pi-mindfold
+pi install /absolute/path/to/pi-mindfold
 ```
 
 Pi 提供运行时依赖，本插件不需要单独安装 `pi-tool-explain`。
@@ -186,8 +192,11 @@ node --import ./tests/host-imports.mjs ./scripts/compat-smoke.mjs
 
 ## 卸载
 
+使用安装时的同一来源：
+
 ```text
-pi remove C:/path/to/pi-mindfold
+pi remove npm:pi-mindfold
+# 或：pi remove /absolute/path/to/pi-mindfold
 ```
 
 随后执行 `/reload` 或重启 Pi。卸载不自动删除已有会话的历史显示数据。
