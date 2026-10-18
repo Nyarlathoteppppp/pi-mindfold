@@ -48,7 +48,7 @@ When using coding agents with deep reasoning models:
   - Adapts the `displaySummary` convention from [pi-tool-explain](https://github.com/Nyarlathoteppppp/pi-tool-explain). The current model writes intent directly inside its normal tool call payload.
   - **No secondary model calls, no separate API keys, and no added latency.**
   - Strips intent fields before forwarding parameters to actual tool implementations, preserving clean argument semantics.
-  - Preserves native OpenAI Grammar Constrained Sampling and host tool-reachability contracts for `codemode`, extracting top-level intent from leading `// 意图：...` source comments.
+  - Preserves native OpenAI Grammar Constrained Sampling and host tool-reachability contracts for `codemode`, extracting top-level intent from a leading `// 意图：...` (or `// Intent: ...`) source comment.
 
 - **Session Persistence & Large-Payload Sidecar**
   - Session `/reload`, `/resume`, and `/fork` seamlessly restore intents and nested tool hierarchies.
@@ -56,7 +56,29 @@ When using coding agents with deep reasoning models:
 
 ### Intent language
 
-Intent text is currently generated in **Simplified Chinese**: the tool-call `displaySummary` prompt, the `活动意图：` public progress line and the `// 意图：` codemode comment are all fixed to `zh-CN`, regardless of the conversation language. Status messages and command descriptions inside Pi are also Chinese. See [README.zh-CN.md](./README.zh-CN.md) for Chinese documentation.
+Intents default to **Simplified Chinese** (`zh-CN`). To get English intents, set `PI_MINDFOLD_LANG=en` in the environment **before starting Pi**:
+
+```bash
+# macOS / Linux (add to ~/.zshrc or ~/.bashrc to keep it)
+export PI_MINDFOLD_LANG=en
+pi
+```
+
+```powershell
+# Windows PowerShell (use `setx PI_MINDFOLD_LANG en` to keep it)
+$env:PI_MINDFOLD_LANG = "en"
+pi
+```
+
+| | `zh-CN` (default) | `en` |
+|---|---|---|
+| Tool `displaySummary` | `检查模块导出与路由声明` | `Inspect module exports and route declarations` |
+| Public progress line | `活动意图：核对重载恢复逻辑` | `Activity intent: Verify reload recovery logic` |
+| codemode comment | `// 意图：批量检查入口文件` | `// Intent: Batch check entry files` |
+| Fallback when the model omits an intent | `读取文件` | `Read file` |
+| `/mindfold status`, command and shortcut descriptions | Chinese | English |
+
+`en`, `en-US`, `en_GB` and similar values select English; any other value keeps `zh-CN`. The language is read once when the extension loads, so restart Pi after changing it (`/reload` keeps the old process environment). Intents already recorded in a session stay in the language they were written in. Both `// 意图：` and `// Intent:` codemode comments are recognised in either mode. See [README.zh-CN.md](./README.zh-CN.md) for Chinese documentation.
 
 ---
 

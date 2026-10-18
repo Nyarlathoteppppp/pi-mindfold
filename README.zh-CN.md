@@ -66,6 +66,24 @@ Pi 提供运行时依赖，本插件不需要单独安装 `pi-tool-explain`。
 
 若同时升级了 Pi 宿主，需要退出并重新启动 Pi；`/reload` 只重载扩展，不能替换运行中的宿主版本。
 
+## 意图语言
+
+默认使用简体中文（`zh-CN`）。如需英文意图，在**启动 Pi 之前**设置环境变量 `PI_MINDFOLD_LANG=en`：
+
+```bash
+# macOS / Linux（写入 ~/.zshrc 或 ~/.bashrc 可长期生效）
+export PI_MINDFOLD_LANG=en
+pi
+```
+
+```powershell
+# Windows PowerShell（长期生效可用 setx PI_MINDFOLD_LANG en）
+$env:PI_MINDFOLD_LANG = "en"
+pi
+```
+
+英文模式下，工具 `displaySummary`、公开状态行（`Activity intent: ...`）、codemode 注释（`// Intent: ...`）、兜底文案以及 `/mindfold status`、命令与快捷键说明均改为英文。`en`、`en-US`、`en_GB` 等值选择英文，其他值保持 `zh-CN`。语言在扩展加载时读取一次，修改后需重启 Pi（`/reload` 沿用原进程环境）。会话中已记录的意图保持原语言。两种模式都能识别 `// 意图：` 与 `// Intent:` 注释。
+
 ## 操作
 
 | 操作 | 效果 |
@@ -85,7 +103,7 @@ Pi 内置的 `/compact` 用于压缩模型上下文。本插件主命令为 `/mi
 
 ## 思考阶段的公开意图
 
-插件会通过结构化系统提示，请模型在提供工作进度说明时，将下面的简体中文状态行放在公开正文开头：
+插件会通过结构化系统提示，请模型在提供工作进度说明时，将下面的简体中文状态行放在公开正文开头（英文模式为 `Activity intent: ...`）：
 
 ```text
 活动意图：检查重载后历史工具的恢复逻辑
