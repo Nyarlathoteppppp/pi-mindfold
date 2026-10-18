@@ -30,12 +30,24 @@ export function saveDisplayPayload(data, directory) {
   }
 }
 
-export function loadDisplayPayload(data) {
+/** Sidecars are content-addressed, so the session directory plus the hash locates
+ * them even after the session folder is moved. The recorded absolute path is a
+ * last resort for records written before the session directory was known. */
+function sidecarCandidates(payload, directory) {
+  const name = `${payload.sha256}.json`;
+  const local = directory ? [join(directory, SIDECAR_DIR, name), join(directory, LEGACY_SIDECAR_DIR, name)] : [];
+  return [...new Set([...local, payload.path].filter((path) => typeof path === "string"))];
+}
+
+export function loadDisplayPayload(data, directory) {
   if (!data?.displayPayload) return data;
   try {
-    const json = readFileSync(data.displayPayload.path, "utf8");
-    if (digest(json) !== data.displayPayload.sha256) throw new Error("display payload checksum mismatch");
-    return JSON.parse(json);
+    for (const path of sidecarCandidates(data.displayPayload, directory)) {
+      let json;
+      try { json = readFileSync(path, "utf8"); } catch { continue; }
+      if (digest(json) === data.displayPayload.sha256) return JSON.parse(json);
+    }
+    throw new Error("display payload is missing or fails its checksum");
   } catch {
     return { ...data, missingDisplayPayload: true,
       args: { displaySummary: "原始显示数据不可用" },

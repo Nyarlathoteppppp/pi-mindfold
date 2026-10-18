@@ -13,7 +13,7 @@ export default function mindfold(pi) {
 
   const restore = (_event, ctx) => {
     controller.clear();
-    store.restore(ctx.sessionManager.buildContextEntries());
+    store.restore(ctx.sessionManager.buildContextEntries(), ctx.sessionManager.getSessionDir());
     controller.attach(ctx);
   };
   pi.on("session_start", restore);
